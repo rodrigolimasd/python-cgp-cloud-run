@@ -8,6 +8,13 @@ resource "google_artifact_registry_repository" "python-gcp-cloud" {
   format = "DOCKER"
 }
 
+# Enable Cloud Run API
+resource "google_project_service" "run" {
+  provider = google-beta
+  service            = "run.googleapis.com"
+  disable_on_destroy = false
+}
+
 # Deploy image to Cloud Run
 resource "google_cloud_run_service" "python-gcp-cloud" {
   name     = "python-gcp-cloud"
