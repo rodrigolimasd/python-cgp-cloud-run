@@ -7,13 +7,13 @@ resource "google_project_service" "artifactregistry" {
 
 # Enable Cloud Run API
 resource "google_project_service" "cloudrun" {
+ project = "rds-labdevopscloud"
  service = "run.googleapis.com"
  disable_on_destroy = false
 }
 
 # Enable Cloud Resource Manager API
 resource "google_project_service" "resourcemanager" {
-  provider = google-beta
   project = "rds-labdevopscloud"
   service  = "cloudresourcemanager.googleapis.com"
   disable_on_destroy = false
