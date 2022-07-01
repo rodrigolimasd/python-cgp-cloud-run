@@ -14,12 +14,13 @@ resource "google_project_service" "cloudrun" {
 # Enable Cloud Resource Manager API
 resource "google_project_service" "resourcemanager" {
   provider = google-beta
+  project = "rds-labdevopscloud"
   service  = "cloudresourcemanager.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "time_sleep" "wait_30_seconds" {
-  create_duration = "30s"
+  create_duration = "60s"
   depends_on = [
     google_project_service.artifactregistry,
     google_project_service.cloudrun,
