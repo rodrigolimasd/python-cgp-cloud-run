@@ -76,5 +76,5 @@ resource "google_cloud_run_service_iam_member" "run_all_users" {
 }
 
 output "cloud_run_instance_url" {
-  value = google_cloud_run_service.python-gcp-cloud.status[0]url
+  value = google_cloud_run_service.python-gcp-cloud.status[0].url
 }
