@@ -1,27 +1,31 @@
 # Enable Artifact Registry API
 resource "google_project_service" "artifactregistry" {
   provider = google-beta
-  service            = "artifactregistry.googleapis.com"
-  disable_on_destroy = true
-}
-
-# Enable Cloud Resource Manager API
-resource "google_project_service" "enable_cloud_resource_manager_api" {
-  service = "cloudresourcemanager.googleapis.com"
-  disable_dependent_services = true
+  service = "artifactregistry.googleapis.com"
+  disable_on_destroy = false
 }
 
 # Enable Cloud Run API
-resource "google_project_service" "run_api" {
- service  = "run.googleapis.com"
+resource "google_project_service" "cloudrun" {
+ service = "run.googleapis.com"
  disable_on_destroy = false
 }
 
 # Enable Cloud Resource Manager API
 resource "google_project_service" "resourcemanager" {
   provider = google-beta
-  service            = "cloudresourcemanager.googleapis.com"
+  service  = "cloudresourcemanager.googleapis.com"
   disable_on_destroy = false
+}
+
+resource "time_sleep" "wait_30_seconds" {
+  create_duration = "30s"
+  depends_on = [
+    google_project_service.iam,
+    google_project_service.artifactregistry,
+    google_project_service.cloudrun,
+    google_project_service.resourcemanager
+    ]
 }
 
 # Create Artifact Registry Repository for Docker containers
@@ -32,7 +36,7 @@ resource "google_artifact_registry_repository" "python-gcp-cloud" {
   repository_id = "pythongcpcloud"
   description = "Imagens Docker python gco cloud"
   format = "DOCKER"
-  depends_on = [google_project_service.artifactregistry]
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 # Deploy image to Cloud Run
