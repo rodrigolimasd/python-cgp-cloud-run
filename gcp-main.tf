@@ -41,9 +41,8 @@ resource "google_artifact_registry_repository" "python-gcp-cloud" {
 
 # Deploy image to Cloud Run
 resource "google_cloud_run_service" "python-gcp-cloud" {
-  name     = "python-gcp-cloud"
-  location = "us-central"
-
+  name = "python-gcp-cloud"
+  location = "us-central1"
   metadata {
     annotations = {
       "run.googleapis.com/client-name" = "terraform",
@@ -68,26 +67,14 @@ resource "google_cloud_run_service" "python-gcp-cloud" {
   depends_on = [google_artifact_registry_repository.python-gcp-cloud]
 }
 
-# Create a policy that allows all users to invoke the API
-data "google_iam_policy" "noauth" {
-  provider = google-beta
-  binding {
-    role = "roles/run.invoker"
-    members = [
-      "allUsers",
-    ]
-  }
-}
-
-# Apply the no-authentication policy to our Cloud Run Service.
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  provider = google-beta
-  location    = "us-central"
-  project     = "rds-labdevopscloud"
-  service     = google_cloud_run_service.python-gcp-cloud.name
-  policy_data = data.google_iam_policy.noauth.policy_data
+# Allow unauthenticated users to invoke the service
+resource "google_cloud_run_service_iam_member" "run_all_users" {
+  service  = google_cloud_run_service.python-gcp-cloud.name
+  location = google_cloud_run_service.python-gcp-cloud.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
 }
 
 output "cloud_run_instance_url" {
-  value = google_cloud_run_service.python-gcp-cloud.status.0.url
+  value = google_cloud_run_service.python-gcp-cloud.status[0]url
 }
