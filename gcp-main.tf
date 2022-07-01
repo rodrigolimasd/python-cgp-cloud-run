@@ -1,3 +1,29 @@
+# Enable Artifact Registry API
+resource "google_project_service" "artifactregistry" {
+  provider = google-beta
+  service            = "artifactregistry.googleapis.com"
+  disable_on_destroy = true
+}
+
+# Enable Cloud Resource Manager API
+resource "google_project_service" "enable_cloud_resource_manager_api" {
+  service = "cloudresourcemanager.googleapis.com"
+  disable_dependent_services = true
+}
+
+# Enable Cloud Run API
+resource "google_project_service" "run_api" {
+ service  = "run.googleapis.com"
+ disable_on_destroy = false
+}
+
+# Enable Cloud Resource Manager API
+resource "google_project_service" "resourcemanager" {
+  provider = google-beta
+  service            = "cloudresourcemanager.googleapis.com"
+  disable_on_destroy = false
+}
+
 # Create Artifact Registry Repository for Docker containers
 resource "google_artifact_registry_repository" "python-gcp-cloud" {
   provider = google-beta
@@ -6,13 +32,7 @@ resource "google_artifact_registry_repository" "python-gcp-cloud" {
   repository_id = "pythongcpcloud"
   description = "Imagens Docker python gco cloud"
   format = "DOCKER"
-}
-
-# Enable Cloud Run API
-resource "google_project_service" "run" {
-  provider = google-beta
-  service            = "run.googleapis.com"
-  disable_on_destroy = false
+  depends_on = [google_project_service.artifactregistry]
 }
 
 # Deploy image to Cloud Run
@@ -40,8 +60,8 @@ resource "google_cloud_run_service" "python-gcp-cloud" {
       }
     }
   }
-    depends_on = [google_project_service.run]
 
+  depends_on = [google_project_service.run_api]
 }
 
 # Create a policy that allows all users to invoke the API
