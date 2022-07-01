@@ -29,8 +29,7 @@ resource "google_cloud_run_service" "python-gcp-cloud" {
   template {
     spec {
       containers {
-        # image_url = "us-centrl1-docker.pkg.dev/rds-labdevopscloud/pythongcpcloud/python-gcp-cloud"
-        image = local.image_url
+        image = "us-centrl1-docker.pkg.dev/rds-labdevopscloud/pythongcpcloud/python-gcp-cloud"
       }
     }
   }
