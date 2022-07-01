@@ -21,7 +21,6 @@ resource "google_project_service" "resourcemanager" {
 resource "time_sleep" "wait_30_seconds" {
   create_duration = "30s"
   depends_on = [
-    google_project_service.iam,
     google_project_service.artifactregistry,
     google_project_service.cloudrun,
     google_project_service.resourcemanager
