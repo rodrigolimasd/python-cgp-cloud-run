@@ -64,7 +64,7 @@ resource "google_cloud_run_service" "python-gcp-cloud" {
     }
   }
 
-  depends_on = [google_project_service.run_api]
+  depends_on = [google_project_service.cloudrun]
 }
 
 # Create a policy that allows all users to invoke the API
