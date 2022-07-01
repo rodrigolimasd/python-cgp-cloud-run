@@ -43,6 +43,7 @@ resource "google_artifact_registry_repository" "python-gcp-cloud" {
 resource "google_cloud_run_service" "python-gcp-cloud" {
   name = "python-gcp-cloud"
   location = "us-central1"
+  autogenerate_revision_name = true
   metadata {
     annotations = {
       "run.googleapis.com/client-name" = "terraform",
