@@ -1,0 +1,9 @@
+import Task
+
+class TaskSchema(SQLAlchemySchema):
+   class Meta(SQLAlchemySchema.Meta):
+       model = Task
+       sqla_session = db.session
+   id = fields.Number(dump_only=True)
+   title = fields.String(required=True)
+   desc = fields.String(required=True)
