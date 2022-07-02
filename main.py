@@ -7,7 +7,16 @@ from marshmallow_sqlalchemy import SQLAlchemySchema
 from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:mysqlpass@localhost:3306/pytask'
+
+mysql_user = os.environ.get("SQL_USER", "root")
+mysql_pass = os.environ.get("SQL_PASSWORD", "mysqlpass")
+mysql_host = os.environ.get("SQL_HOST", "localhost")
+mysql_port = os.environ.get("SQL_PORT", "3306")
+mysql_db = os.environ.get("SQL_DB", "pytask")
+
+db = f"postgresql://{mysql_user}:{mysql_pass}@{mysql_host}:{mysql_port}/{mysql_db}"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", db)
 db = SQLAlchemy(app)
 ma = Marshmallow(app) 
 

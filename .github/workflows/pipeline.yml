@@ -70,6 +70,11 @@ jobs:
         id: deploy
         env: 
           ARTIFACT_REGISTRY: ${{ secrets.ARTIFACT_REGISTRY }}
+          SQL_USER: ${{ secrets.SQL_USER }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_HOST: ${{ secrets.SQL_HOST }}
+          SQL_PORT: ${{ secrets.SQL_PORT }}
+          SQL_DB: ${{ secrests.SQL_DB }}
         uses: 'google-github-actions/deploy-cloudrun@v0'
         with:
           service: 'python-gcp-cloud'
