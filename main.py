@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    name = os.environ.get("NAME", "CGP Cloud Run - V1")
+    name = os.environ.get("NAME", "CGP Cloud Run - V2")
     return "Hello {}!".format(name)
 
 if __name__ == "__main__":
